@@ -38,6 +38,7 @@ const registerUser = asyncHandler(async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        token: generateToken(user._id),
       },
     });
   } else {
@@ -49,6 +50,27 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400);
+    throw new Error("Enter email and password");
+  }
+
+  const user = await User.findOne({ email });
+  const isPasswordMatched = await bcrypt.compare(password, user.password);
+  if (user && isPasswordMatched) {
+    console.log(user._id);
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid Credential");
+  }
+
   res.json({ message: "Login User" });
 });
 
@@ -57,6 +79,9 @@ const getMe = asyncHandler(async (req, res) => {
   res.json({ message: "Get users" });
 });
 
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+};
 const validateUser = (user) => {
   const schema = Joi.object({
     name: Joi.string().required("Please add name"),
