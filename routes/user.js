@@ -12,4 +12,4 @@ router.post("/", registerUser);
 router.post("/login", loginUser);
 router.get("/me", getMe);
 
-module.export = router;
+module.exports = router;
