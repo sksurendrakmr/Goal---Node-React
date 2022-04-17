@@ -7,6 +7,11 @@ const goalSchema = new mongoose.Schema(
       maxlength: 500,
       required: [true, "Please add a text value"],
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", //name of the model, user associated with the goal
+      required: true,
+    },
   },
   { timestamps: true }
 );
