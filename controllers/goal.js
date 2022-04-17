@@ -5,9 +5,13 @@ const getGoals = (req, res) => {
 };
 
 const saveGoal = (req, res) => {
-  const { error } = validateGoal(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
+  //   const { error } = validateGoal(req.body);
+  //   if (error) return res.status(400).json({ message: error.details[0].message });
 
+  if (!req.body.text) {
+    res.status(404);
+    throw new Error("Please add a text");
+  }
   res.status(201).json({ message: "Save goal" });
 };
 
@@ -21,7 +25,9 @@ const deleteGoal = (req, res) => {
 };
 
 const validateGoal = (goal) => {
-  const schema = Joi.object({});
+  const schema = Joi.object({
+    text: Joi.string().required("Please add a text field"),
+  });
   return schema.validate(goal);
 };
 
