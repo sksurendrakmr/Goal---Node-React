@@ -71,17 +71,13 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid Credential");
   }
 
-  res.json({ message: "Login User" });
+  // res.json({ message: "Login User" });
 });
 
 //will send the token and with that token get the id and find the user
 const getMe = asyncHandler(async (req, res) => {
-  const { _id, name, email } = await User.findById(req.user.id);
-  res.status(200).json({
-    id: _id,
-    name,
-    email,
-  });
+  // const { _id, name, email } = req.user
+  res.status(200).json(req.user);
 });
 
 const generateToken = (id) => {
